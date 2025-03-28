@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiosco Starbucks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .sb-green {
+            background-color: #006241;
+        }
+        .sb-light {
+            background-color: #d4e8e1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="sb-green text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png" 
+                 alt="Starbucks Logo" class="h-12">
+            <div class="flex items-center">
+                <i class="fas fa-volume-up text-xl mr-4"></i>
+                <button class="bg-white text-sb-green px-4 py-2 rounded-full font-bold">
+                    <i class="fas fa-language mr-2"></i> Idioma
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <h1 class="text-3xl font-bold text-sb-green mb-8">¿Qué te gustaría ordenar?</h1>
+        
+        <div class="grid grid-cols-2 gap-6 mb-8">
+            <button onclick="showDrinks()" class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+                <i class="fas fa-coffee text-5xl text-sb-green mb-4"></i>
+                <span class="text-xl font-bold">Bebidas</span>
+            </button>
+            <button onclick="showFood()" class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+                <i class="fas fa-utensils text-5xl text-sb-green mb-4"></i>
+                <span class="text-xl font-bold">Comida</span>
+            </button>
+        </div>
+
+        <div id="drinksPanel" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold text-sb-green mb-4">Nuestras Bebidas</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="showCoffeeMenu()" class="border border-sb-green p-4 rounded-lg">
+                    <i class="fas fa-coffee text-sb-green text-2xl mb-2"></i>
+                    <p class="font-bold">Café</p>
+                    <p class="text-sm text-gray-600">12 variedades desde $2.50</p>
+                </button>
+                <button onclick="showTeaMenu()" class="border border-sb-green p-4 rounded-lg">
+                    <i class="fas fa-mug-hot text-sb-green text-2xl mb-2"></i>
+                    <p class="font-bold">Té</p>
+                    <p class="text-sm text-gray-600">8 variedades desde $2.00</p>
+                </button>
+            </div>
+        </div>
+
+        <div id="foodPanel" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold text-sb-green mb-4">Nuestra Comida</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="showBakeryMenu()" class="border border-sb-green p-4 rounded-lg">
+                    <i class="fas fa-bread-slice text-sb-green text-2xl mb-2"></i>
+                    <p class="font-bold">Panadería</p>
+                    <p class="text-sm text-gray-600">7 opciones desde $1.50</p>
+                </button>
+                <button onclick="showSnacksMenu()" class="border border-sb-green p-4 rounded-lg">
+                    <i class="fas fa-cookie text-sb-green text-2xl mb-2"></i>
+                    <p class="font-bold">Snacks</p>
+                    <p class="text-sm text-gray-600">5 opciones desde $2.00</p>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-sb-green mb-4">Recomendado para ti</h2>
+            <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                <img src="https://www.starbucks.com/weblx/images/rewards/benefits/1-fun-freebies.jpg" 
+                     class="w-20 h-20 object-cover rounded-lg mr-4">
+                <div>
+                    <p class="font-bold">Caramel Macchiato</p>
+                    <p class="text-gray-600">Con leche de almendras</p>
+                    <p class="text-sb-green font-bold mt-2">$4.95</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showDrinks() {
+            document.getElementById('drinksPanel').classList.remove('hidden');
+            document.getElementById('foodPanel').classList.add('hidden');
+        }
+
+        function showFood() {
+            document.getElementById('foodPanel').classList.remove('hidden');
+            document.getElementById('drinksPanel').classList.add('hidden');
+        }
+
+        function showCoffeeMenu() {
+            document.getElementById('coffeeMenu').classList.remove('hidden');
+            document.getElementById('teaMenu').classList.add('hidden');
+            document.getElementById('bakeryMenu').classList.add('hidden');
+            document.getElementById('snacksMenu').classList.add('hidden');
+        }
+
+        function showTeaMenu() {
+            document.getElementById('teaMenu').classList.remove('hidden');
+            document.getElementById('coffeeMenu').classList.add('hidden');
+            document.getElementById('bakeryMenu').classList.add('hidden');
+            document.getElementById('snacksMenu').classList.add('hidden');
+        }
+
+        function showBakeryMenu() {
+            document.getElementById('bakeryMenu').classList.remove('hidden');
+            document.getElementById('coffeeMenu').classList.add('hidden');
+            document.getElementById('teaMenu').classList.add('hidden');
+            document.getElementById('snacksMenu').classList.add('hidden');
+        }
+
+        function showSnacksMenu() {
+            document.getElementById('snacksMenu').classList.remove('hidden');
+            document.getElementById('coffeeMenu').classList.add('hidden');
+            document.getElementById('teaMenu').classList.add('hidden');
+            document.getElementById('bakeryMenu').classList.add('hidden');
+        }
+    </script>
+        <!-- Coffee Menu -->
+        <div id="coffeeMenu" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Menú de Cafés</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-coffee text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Americano</p>
+                    <p class="text-sb-green">$2.50</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-mug-hot text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Latte</p>
+                    <p class="text-sb-green">$3.50</p>
+                </div>
+                <!-- Add remaining 10 coffee items similarly -->
+            </div>
+        </div>
+
+        <!-- Tea Menu -->
+        <div id="teaMenu" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Menú de Tés</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-leaf text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">English Breakfast</p>
+                    <p class="text-sb-green">$2.00</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-teapot text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Earl Grey</p>
+                    <p class="text-sb-green">$2.25</p>
+                </div>
+                <!-- Add remaining 6 tea items similarly -->
+            </div>
+        </div>
+
+        <!-- Bakery Menu -->
+        <div id="bakeryMenu" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Panadería</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-bread-slice text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Croissant</p>
+                    <p class="text-sb-green">$1.50</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-cookie text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Muffin</p>
+                    <p class="text-sb-green">$2.50</p>
+                </div>
+                <!-- Add remaining 5 bakery items similarly -->
+            </div>
+        </div>
+
+        <!-- Snacks Menu -->
+        <div id="snacksMenu" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Snacks</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-biscuit text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Cookie</p>
+                    <p class="text-sb-green">$2.00</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-cake text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">Brownie</p>
+                    <p class="text-sb-green">$2.50</p>
+                </div>
+                <!-- Add remaining 3 snack items similarly -->
+            </div>
+        </div>
+    </main>
+</body>
+</html>

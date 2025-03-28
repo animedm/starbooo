@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbucks App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .sb-green {
+            background-color: #006241;
+        }
+        .sb-light {
+            background-color: #d4e8e1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="sb-green text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png" 
+                 alt="Starbucks Logo" class="h-12">
+            <div class="flex space-x-4">
+                <button class="bg-white text-sb-green px-4 py-2 rounded-full font-bold">
+                    <i class="fas fa-user mr-2"></i>Iniciar sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 mt-8">
+        <h1 class="text-3xl font-bold text-sb-green mb-8">App Móvil Starbucks</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex space-x-4 mb-6">
+                        <button onclick="showOrderPanel()" class="sb-green text-white px-6 py-3 rounded-full text-lg flex-1">
+                            <i class="fas fa-coffee mr-2"></i> Hacer Pedido
+                        </button>
+                        <button onclick="showVirtualQueue()" class="border border-sb-green text-sb-green px-6 py-3 rounded-full text-lg flex-1">
+                            <i class="fas fa-clock mr-2"></i> Fila Virtual
+                        </button>
+            </div>
+            
+            <div class="border-t pt-6">
+                <h2 class="text-xl font-bold text-sb-green mb-4">Tu actividad reciente</h2>
+                <div class="space-y-4">
+                        <div id="orderPanel" class="hidden">
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <button onclick="showCoffeeDetails()" class="border border-sb-green p-3 rounded-lg">
+                                    <i class="fas fa-coffee text-sb-green text-xl mb-1"></i><br>
+                                    Café (12 opciones)
+                                </button>
+                                <button onclick="showTeaDetails()" class="border border-sb-green p-3 rounded-lg">
+                                    <i class="fas fa-mug-hot text-sb-green text-xl mb-1"></i><br>
+                                    Té (8 variedades)
+                                </button>
+                            </div>
+            <div class="border-t pt-4">
+                <p class="font-bold text-sb-green mb-2">Personaliza tu bebida:</p>
+                
+                <div id="sizeOptions" class="hidden mb-4">
+                    <p class="text-sm font-medium mb-2">Tamaño:</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button class="border border-sb-green p-2 rounded text-sm">Chico</button>
+                        <button class="border border-sb-green p-2 rounded text-sm">Mediano</button>
+                        <button class="border border-sb-green p-2 rounded text-sm">Grande</button>
+                    </div>
+                </div>
+                
+                <div id="milkOptions" class="hidden">
+                    <p class="text-sm font-medium mb-2">Tipo de leche:</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="border border-sb-green p-2 rounded text-sm">Entera</button>
+                        <button class="border border-sb-green p-2 rounded text-sm">Deslactosada</button>
+                        <button class="border border-sb-green p-2 rounded text-sm">Almendras</button>
+                        <button class="border border-sb-green p-2 rounded text-sm">Soya</button>
+                    </div>
+                </div>
+            </div>
+                        </div>
+
+                        <div id="virtualQueue" class="hidden">
+                            <div class="p-4 bg-gray-50 rounded-lg mb-4">
+                                <p class="font-bold text-sb-green mb-2">Tu lugar en la fila:</p>
+                                <p class="text-2xl font-bold">#3 de 15</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                    <div class="bg-sb-green h-2.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                                <p class="text-gray-600 mt-2">Tiempo estimado: 8-12 minutos</p>
+                                <button class="sb-green text-white px-4 py-2 rounded-full mt-4 w-full">
+                                    Notificarme cuando sea mi turno
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="notification" class="flex items-center p-4 bg-gray-50 rounded-lg">
+                            <div class="w-12 h-12 bg-sb-green rounded-full flex items-center justify-center text-white mr-4">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold">Tu pedido está listo</p>
+                                <p class="text-gray-600">Café Mocha Grande - Listo para recoger</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function showOrderPanel() {
+            document.getElementById('orderPanel').classList.remove('hidden');
+            document.getElementById('virtualQueue').classList.add('hidden');
+        }
+
+        function showVirtualQueue() {
+            document.getElementById('virtualQueue').classList.remove('hidden');
+            document.getElementById('orderPanel').classList.add('hidden');
+        }
+
+        let selectedDrink = null;
+
+        function selectDrink(element, drinkName) {
+            // Reset all drink selections
+            document.querySelectorAll('#coffeeDetails > div > div, #teaDetails > div > div').forEach(drink => {
+                drink.querySelector('i').classList.remove('text-sb-green');
+                drink.querySelector('i').classList.add('text-gray-400');
+            });
+            
+            // Highlight selected drink
+            element.querySelector('i').classList.remove('text-gray-400');
+            element.querySelector('i').classList.add('text-sb-green');
+            selectedDrink = drinkName;
+            
+            // Show size and milk options
+            document.getElementById('sizeOptions').classList.remove('hidden');
+            document.getElementById('milkOptions').classList.remove('hidden');
+        }
+
+        function showCoffeeDetails() {
+            document.getElementById('coffeeDetails').classList.remove('hidden');
+            document.getElementById('teaDetails').classList.add('hidden');
+            document.getElementById('sizeOptions').classList.add('hidden');
+            document.getElementById('milkOptions').classList.add('hidden');
+        }
+
+        function showTeaDetails() {
+            document.getElementById('teaDetails').classList.remove('hidden');
+            document.getElementById('coffeeDetails').classList.add('hidden');
+            document.getElementById('sizeOptions').classList.add('hidden');
+            document.getElementById('milkOptions').classList.add('hidden');
+        }
+    </script>
+        <!-- Coffee Details -->
+        <div id="coffeeDetails" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Opciones de Café</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center" onclick="selectDrink(this, 'Americano')">
+                    <i class="fas fa-coffee text-4xl text-gray-400 mb-2"></i>
+                    <p class="font-bold">1. Americano</p>
+                    <p class="text-sb-green">$2.50</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center" onclick="selectDrink(this, 'Latte')">
+                    <i class="fas fa-mug-hot text-4xl text-gray-400 mb-2"></i>
+                    <p class="font-bold">2. Latte</p>
+                    <p class="text-sb-green">$3.50</p>
+                </div>
+                <!-- Add remaining 10 coffee items similarly -->
+            </div>
+        </div>
+
+        <!-- Tea Details -->
+        <div id="teaDetails" class="hidden bg-white rounded-lg shadow-lg p-6 mt-4">
+            <h3 class="text-xl font-bold text-sb-green mb-4">Opciones de Té</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-leaf text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">1. English Breakfast</p>
+                    <p class="text-sb-green">$2.00</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                    <i class="fas fa-teapot text-4xl text-sb-green mb-2"></i>
+                    <p class="font-bold">2. Earl Grey</p>
+                    <p class="text-sb-green">$2.25</p>
+                </div>
+                <!-- Add remaining 6 tea items similarly -->
+            </div>
+        </div>
+    </main>
+</body>
+</html>
