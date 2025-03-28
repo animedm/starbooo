@@ -65,21 +65,22 @@
                 <div id="sizeOptions" class="hidden mb-4">
                     <p class="text-sm font-medium mb-2">Tamaño:</p>
                     <div class="grid grid-cols-3 gap-2">
-                        <button class="border border-sb-green p-2 rounded text-sm">Chico</button>
-                        <button class="border border-sb-green p-2 rounded text-sm">Mediano</button>
-                        <button class="border border-sb-green p-2 rounded text-sm">Grande</button>
+                        <button onclick="selectSize(this, 'Chico')" class="border border-sb-green p-2 rounded text-sm">Chico</button>
+                        <button onclick="selectSize(this, 'Mediano')" class="border border-sb-green p-2 rounded text-sm">Mediano</button>
+                        <button onclick="selectSize(this, 'Grande')" class="border border-sb-green p-2 rounded text-sm">Grande</button>
                     </div>
                 </div>
                 
-                <div id="milkOptions" class="hidden">
+                <div id="milkOptions" class="hidden mb-4">
                     <p class="text-sm font-medium mb-2">Tipo de leche:</p>
                     <div class="grid grid-cols-2 gap-2">
-                        <button class="border border-sb-green p-2 rounded text-sm">Entera</button>
-                        <button class="border border-sb-green p-2 rounded text-sm">Deslactosada</button>
-                        <button class="border border-sb-green p-2 rounded text-sm">Almendras</button>
-                        <button class="border border-sb-green p-2 rounded text-sm">Soya</button>
+                        <button onclick="selectMilk(this, 'Entera')" class="border border-sb-green p-2 rounded text-sm">Entera</button>
+                        <button onclick="selectMilk(this, 'Deslactosada')" class="border border-sb-green p-2 rounded text-sm">Deslactosada</button>
+                        <button onclick="selectMilk(this, 'Almendras')" class="border border-sb-green p-2 rounded text-sm">Almendras</button>
+                        <button onclick="selectMilk(this, 'Soya')" class="border border-sb-green p-2 rounded text-sm">Soya</button>
                     </div>
                 </div>
+
             </div>
                         </div>
 
@@ -122,6 +123,14 @@
         }
 
         let selectedDrink = null;
+        let selectedSize = null;
+        let selectedMilk = null;
+        const drinkPrices = {
+            'Americano': 2.50,
+            'Latte': 3.50,
+            'English Breakfast': 2.00,
+            'Earl Grey': 2.25
+        };
 
         function selectDrink(element, drinkName) {
             // Reset all drink selections
@@ -138,6 +147,90 @@
             // Show size and milk options
             document.getElementById('sizeOptions').classList.remove('hidden');
             document.getElementById('milkOptions').classList.remove('hidden');
+            document.getElementById('orderSummary').classList.add('hidden');
+        }
+
+        function selectSize(element, size) {
+            // Reset all size selections
+            document.querySelectorAll('#sizeOptions button').forEach(btn => {
+                btn.classList.remove('bg-sb-green', 'text-white');
+                btn.classList.add('border-sb-green', 'text-gray-600');
+            });
+            
+            // Highlight selected size
+            element.classList.remove('border-sb-green', 'text-sb-green');
+            element.classList.add('bg-sb-green', 'text-white');
+            selectedSize = size;
+            
+            updateOrderSummary();
+        }
+
+        function selectMilk(element, milk) {
+            // Reset all milk selections
+            document.querySelectorAll('#milkOptions button').forEach(btn => {
+                btn.classList.remove('bg-sb-green', 'text-white');
+                btn.classList.add('border-sb-green', 'text-gray-600');
+            });
+            
+            // Highlight selected milk
+            element.classList.remove('border-sb-green', 'text-sb-green');
+            element.classList.add('bg-sb-green', 'text-white');
+            selectedMilk = milk;
+            
+            updateOrderSummary();
+        }
+
+        function updateOrderSummary() {
+            if (selectedDrink && selectedSize && selectedMilk) {
+                showOrderModal();
+            }
+        }
+
+        function showOrderModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+                    <h3 class="text-xl font-bold text-sb-green mb-4">Confirmar Pedido</h3>
+                    <div class="space-y-2 mb-6">
+                        <p><span class="font-bold">Bebida:</span> ${selectedDrink}</p>
+                        <p><span class="font-bold">Tamaño:</span> ${selectedSize}</p>
+                        <p><span class="font-bold">Leche:</span> ${selectedMilk}</p>
+                        <p class="text-lg font-bold mt-4">Total: $${drinkPrices[selectedDrink].toFixed(2)}</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button onclick="this.parentElement.parentElement.remove()" 
+                                class="flex-1 border border-sb-green text-sb-green py-2 rounded-full">
+                            Cancelar
+                        </button>
+                        <button onclick="confirmOrder()" 
+                                class="flex-1 sb-green text-white py-2 rounded-full">
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function confirmOrder() {
+            const modals = document.querySelectorAll('.fixed.inset-0');
+            modals.forEach(modal => modal.remove());
+            
+            const confirmation = document.createElement('div');
+            confirmation.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            confirmation.innerHTML = `
+                <div class="bg-white rounded-lg p-6 w-full max-w-md text-center">
+                    <i class="fas fa-check-circle text-5xl text-sb-green mb-4"></i>
+                    <h3 class="text-xl font-bold text-sb-green mb-2">¡Pedido Confirmado!</h3>
+                    <p class="mb-6">Tu pedido estará listo en 5-7 minutos</p>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            class="sb-green text-white px-6 py-2 rounded-full">
+                        Aceptar
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(confirmation);
         }
 
         function showCoffeeDetails() {
@@ -159,12 +252,12 @@
             <h3 class="text-xl font-bold text-sb-green mb-4">Opciones de Café</h3>
             <div class="grid grid-cols-2 gap-4">
                 <div class="border border-gray-200 rounded-lg p-3 text-center" onclick="selectDrink(this, 'Americano')">
-                    <i class="fas fa-coffee text-4xl text-gray-400 mb-2"></i>
+                    <i class="fas fa-coffee text-4xl text-gray-400 mb-2" style="color: #006241 !important;"></i>
                     <p class="font-bold">1. Americano</p>
                     <p class="text-sb-green">$2.50</p>
                 </div>
                 <div class="border border-gray-200 rounded-lg p-3 text-center" onclick="selectDrink(this, 'Latte')">
-                    <i class="fas fa-mug-hot text-4xl text-gray-400 mb-2"></i>
+                    <i class="fas fa-mug-hot text-4xl text-gray-400 mb-2" style="color: #006241 !important;"></i>
                     <p class="font-bold">2. Latte</p>
                     <p class="text-sb-green">$3.50</p>
                 </div>
@@ -177,12 +270,12 @@
             <h3 class="text-xl font-bold text-sb-green mb-4">Opciones de Té</h3>
             <div class="grid grid-cols-2 gap-4">
                 <div class="border border-gray-200 rounded-lg p-3 text-center">
-                    <i class="fas fa-leaf text-4xl text-sb-green mb-2"></i>
+                    <i class="fas fa-leaf text-4xl text-sb-green mb-2" style="color: #006241 !important;"></i>
                     <p class="font-bold">1. English Breakfast</p>
                     <p class="text-sb-green">$2.00</p>
                 </div>
                 <div class="border border-gray-200 rounded-lg p-3 text-center">
-                    <i class="fas fa-teapot text-4xl text-sb-green mb-2"></i>
+                    <i class="fas fa-teapot text-4xl text-sb-green mb-2" style="color: #006241 !important;"></i>
                     <p class="font-bold">2. Earl Grey</p>
                     <p class="text-sb-green">$2.25</p>
                 </div>
